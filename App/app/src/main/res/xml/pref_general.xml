@@ -1,0 +1,23 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- NOTE: EditTextPreference accepts EditText attributes. -->
+    <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
+    <ListPreference
+        android:key="pref_hostname"
+        android:title="@string/pref_hostname"
+        android:entries="@array/pref_hostname_entries"
+        android:entryValues="@array/pref_hostname_values"
+        android:defaultValue="127.0.0.1"/>
+
+    <!-- NOTE: EditTextPreference accepts EditText attributes. -->
+    <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
+    <EditTextPreference
+        android:defaultValue="@string/pref_default_port"
+        android:inputType="number"
+        android:key="pref_port"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_port" />
+
+</PreferenceScreen>
