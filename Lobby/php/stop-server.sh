@@ -3,7 +3,7 @@
 workingDir=$(dirname "$(readlink -f "$0")")
 workingDir="$workingDir/.."
 
-pid=`ps | awk '/php-cli/{print $2}'`
+pid=`pgrep -f php-cli`
 
 if [ -z "$pid" ]; then
   false
