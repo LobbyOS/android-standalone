@@ -2,12 +2,14 @@ package com.lobby.lobby;
 
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -21,6 +23,8 @@ import android.view.MenuItem;
 
 import java.util.List;
 import java.net.InetAddress;
+
+import static com.lobby.lobby.LobbyActivity.startServer;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -147,7 +151,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
      */
     protected boolean isValidFragment(String fragmentName) {
         return PreferenceFragment.class.getName().equals(fragmentName)
-                || GeneralPreferenceFragment.class.getName().equals(fragmentName);
+                || GeneralPreferenceFragment.class.getName().equals(fragmentName)
+                || ServerActionsPreferenceFragment.class.getName().equals(fragmentName);
     }
 
     /**
@@ -192,4 +197,54 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         }
     }
 
+    public static class ServerActionsPreferenceFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_server_actions);
+
+            final Preference stopServerBTN = (Preference) findPreference("pref_stop_server");
+
+            stopServerBTN.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    String storageDir = Environment.getExternalStorageDirectory().getPath();
+                    String dataDir = storageDir + "/Lobby";
+
+                    Utils.executeCommand("sh", dataDir + "/php/stop-server.sh");
+
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle("Server Stopped")
+                            .setMessage("The server has been stopped")
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                    return true;
+                }
+            });
+
+            final Preference restartServerBTN = (Preference) findPreference("pref_restart_server");
+
+            restartServerBTN.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    String storageDir = Environment.getExternalStorageDirectory().getPath();
+                    String dataDir = storageDir + "/Lobby";
+
+                    String hostname = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("pref_hostname", "127.0.0.1");
+                    String host = hostname + ":" +
+                            PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("pref_port", "2020");
+
+                    Utils.executeCommand("sh", dataDir + "/php/stop-server.sh");
+                    startServer(dataDir, host);
+
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle("Server Restarted")
+                            .setMessage("The server has been restarted")
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                    return true;
+                }
+            });
+        }
+    }
 }

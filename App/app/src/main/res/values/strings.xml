@@ -10,6 +10,10 @@
 
     <!-- Strings related to Settings -->
     <string name="pref_header_general">General</string>
+    <string name="pref_header_server_actions">Server Actions</string>
+
+    <string name="stop_server">Stop Server</string>
+    <string name="restart_server">Restart Server</string>
 
     <string name="pref_hostname">Hostname</string>
     <string name="pref_port">Port</string>

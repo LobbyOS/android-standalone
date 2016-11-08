@@ -162,7 +162,7 @@ public class PHPInstallActivity extends AppCompatActivity {
                         @Override
                         public void onProgress(long downloaded, long total) {
                             if (total == -1)
-                                total = 8000000;
+                                total = 7000000;
 
                             final String downloadedF = Utils.humanReadableSize(downloaded, true);
                             final String totalF = Utils.humanReadableSize(total, true);
