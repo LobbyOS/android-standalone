@@ -1,13 +1,20 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            storeFile file('***REMOVED***')
+            storePassword 'Subin14196android-keys'
+        }
+    }
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
     defaultConfig {
         applicationId 'com.lobby.lobby'
         minSdkVersion 16
         targetSdkVersion 24
-        versionName '0.1'
+        versionCode 1
+        versionName '1.0'
     }
     buildTypes {
         release {
@@ -15,11 +22,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    productFlavors {
+    }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.google.android.gms:play-services-appindexing:9.4.0'
-    compile "com.android.support:appcompat-v7:23.0.1"
+    compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.koushikdutta.ion:ion:2.1.9'
 }

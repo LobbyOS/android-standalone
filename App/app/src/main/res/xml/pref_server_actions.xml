@@ -1,11 +1,15 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <Preference android:title="@string/restart_server"
-        android:key="pref_restart_server"
-        android:summary="Restart the Lobby server running in background" />
+    <Preference android:title="@string/start_server"
+        android:key="pref_start_server"
+        android:summary="Start the Lobby server" />
 
     <Preference android:title="@string/stop_server"
         android:key="pref_stop_server"
-        android:summary="Stop the Lobby server running in background" />
+        android:summary="Stop the Lobby server if it's running in background" />
+
+    <Preference android:title="@string/restart_server"
+        android:key="pref_restart_server"
+        android:summary="Restart the Lobby server" />
 
 </PreferenceScreen>

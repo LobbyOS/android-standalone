@@ -16,7 +16,6 @@
         android:progress="50"
         android:visibility="visible"
         android:translationZ="10dp"
-        android:layout_alignTop="@+id/webView"
         android:layout_marginTop="-7dp">
     </ProgressBar>
     <android.support.v4.widget.SwipeRefreshLayout
@@ -33,6 +32,16 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:layout_margin="0dp" />
+                android:layout_margin="0dp"
+                android:visibility="invisible" />
     </android.support.v4.widget.SwipeRefreshLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Starting server..."
+        android:id="@+id/preMSG"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

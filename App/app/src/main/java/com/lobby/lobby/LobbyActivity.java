@@ -22,6 +22,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.lobby.lobby.Utils;
 
@@ -35,12 +36,13 @@ public class LobbyActivity extends AppCompatActivity implements ViewTreeObserver
     String hostname = "127.0.0.1";
     String host = "127.0.0.1:2020";
 
+    TextView preMSG;
     WebView webview;
     Bundle webviewBundle;
 
     SwipeRefreshLayout swipeLayout;
 
-    boolean openInBrowser = false;
+    boolean dontDestroyServer = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,8 @@ public class LobbyActivity extends AppCompatActivity implements ViewTreeObserver
         hostname = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("pref_hostname", "127.0.0.1");
         host = hostname + ":" +
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("pref_port", "2020");
+
+        preMSG = (TextView) findViewById(R.id.preMSG);
 
         webview = (WebView) findViewById(R.id.webView);
         webview.setWebViewClient(new WebViewClient());
@@ -121,6 +125,8 @@ public class LobbyActivity extends AppCompatActivity implements ViewTreeObserver
         if (savedInstanceState != null) {
             // Restore value of members from saved state
             webview.restoreState(savedInstanceState.getBundle("webviewBundle"));
+            preMSG.setVisibility(View.GONE);
+            webview.setVisibility(View.VISIBLE);
         }else {
             launchLobby();
         }
@@ -144,6 +150,8 @@ public class LobbyActivity extends AppCompatActivity implements ViewTreeObserver
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        dontDestroyServer = true;
+
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.settings:
@@ -151,10 +159,10 @@ public class LobbyActivity extends AppCompatActivity implements ViewTreeObserver
                 startActivity(intent);
                 return true;
             case R.id.refresh:
+                preMSG.setVisibility(View.GONE);
                 webview.reload();
                 return true;
             case R.id.openInBrowser:
-                openInBrowser = true;
                 String url = "http://" + host;
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
@@ -204,16 +212,17 @@ public class LobbyActivity extends AppCompatActivity implements ViewTreeObserver
 
         webviewBundle = new Bundle();
         webview.saveState(webviewBundle);
-        if(!openInBrowser)
-            stopServer();
     }
 
+        /**
     @Override
     public void onDestroy(){
         super.onDestroy();
 
-        stopServer();
+        if(!dontDestroyServer)
+            stopServer();
     }
+         */
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
@@ -246,14 +255,25 @@ public class LobbyActivity extends AppCompatActivity implements ViewTreeObserver
      * Start server and load webview
      */
     public void launchLobby(){
-        webview.loadData("Starting server...", "text/html; charset=utf-8", "UTF-8");
+        preMSG.setVisibility(View.VISIBLE);
         startServer(dataDir, host);
-        webview.loadUrl("http://" + host);
+
+        new android.os.Handler().postDelayed(
+                new Runnable() {
+                    public void run() {
+                        webview.loadUrl("http://" + host);
+                        preMSG.setVisibility(View.GONE);
+                        webview.setVisibility(View.VISIBLE);
+                    }
+                },
+                1000);
     }
 
     public static void startServer(String dataDir1, String host1){
         final String dataDir = dataDir1;
         final String host = host1;
+
+        Log.d("cccc", "bbbb");
 
         Runnable myRunnable = new Runnable() {
             public void run() {

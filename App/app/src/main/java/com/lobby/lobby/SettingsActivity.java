@@ -203,12 +203,35 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_server_actions);
 
+            final Preference startServerBTN = (Preference) findPreference("pref_start_server");
+
+            startServerBTN.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    String storageDir = getActivity().getFilesDir().getPath();
+                    String dataDir = storageDir + "/Lobby";
+
+                    String hostname = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("pref_hostname", "127.0.0.1");
+                    String host = hostname + ":" +
+                            PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("pref_port", "2020");
+
+                    startServer(dataDir, host);
+
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle("Server Started")
+                            .setMessage("The server has been started")
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                    return true;
+                }
+            });
+
             final Preference stopServerBTN = (Preference) findPreference("pref_stop_server");
 
             stopServerBTN.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    String storageDir = Environment.getExternalStorageDirectory().getPath();
+                    String storageDir = getActivity().getFilesDir().getPath();
                     String dataDir = storageDir + "/Lobby";
 
                     Utils.executeCommand("sh", dataDir + "/php/stop-server.sh");
@@ -227,7 +250,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             restartServerBTN.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    String storageDir = Environment.getExternalStorageDirectory().getPath();
+                    String storageDir = getActivity().getFilesDir().getPath();
                     String dataDir = storageDir + "/Lobby";
 
                     String hostname = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("pref_hostname", "127.0.0.1");
@@ -235,6 +258,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                             PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("pref_port", "2020");
 
                     Utils.executeCommand("sh", dataDir + "/php/stop-server.sh");
+
+                    android.os.SystemClock.sleep(1000);
+
                     startServer(dataDir, host);
 
                     new AlertDialog.Builder(getActivity())
