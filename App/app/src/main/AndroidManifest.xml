@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.lobby.lobby"
-    android:versionCode="1"
-    android:versionName="1.0">
+    package="com.lobby.installer"
+    android:versionCode="4"
+    android:versionName="4.0">
 
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
@@ -20,7 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name="com.lobby.installer.MainActivity"
             android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,15 +37,15 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".SettingsActivity"
+            android:name="com.lobby.installer.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName="com.lobby.installer.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.lobby.lobby.MainActivity" />
+                android:value="com.lobby.installer.MainActivity" />
         </activity>
-        <activity android:name=".LobbyActivity" android:configChanges="orientation|screenSize" />
-        <activity android:name=".PHPInstallActivity"></activity>
+        <activity android:name="com.lobby.installer.LobbyActivity" android:configChanges="orientation|screenSize" />
+        <activity android:name="com.lobby.installer.PHPInstallActivity"></activity>
     </application>
 
 </manifest>

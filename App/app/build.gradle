@@ -4,17 +4,20 @@ android {
     signingConfigs {
         config {
             storeFile file('***REMOVED***')
-            storePassword 'Subin14196android-keys'
+            storePassword '***REMOVED***'
+            keyAlias 'a'
+            keyPassword '***REMOVED***'
         }
     }
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
     defaultConfig {
-        applicationId 'com.lobby.lobby'
+        applicationId 'com.lobby.installer'
         minSdkVersion 16
         targetSdkVersion 24
-        versionCode 1
-        versionName '1.0'
+        versionCode 5
+        versionName '5'
+        signingConfig signingConfigs.config
     }
     buildTypes {
         release {

@@ -1,4 +1,4 @@
-package com.lobby.lobby;
+package com.lobby.installer;
 
 import android.app.Activity;
 import android.content.Context;
@@ -81,6 +81,10 @@ public class PHPInstallActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void setHashes(String[] inputHashes){
+        hashes = inputHashes;
+    }
+
     private void getHashes(){
         Ion.with(getApplicationContext())
                 .load(filesURL + "/MD5SUMS").asString()
@@ -92,9 +96,9 @@ public class PHPInstallActivity extends AppCompatActivity {
                                           @Override
                                           public void run() {
                                               try {
-                                                  hashes = result.split("\\s+");
+                                                  setHashes(result.split("\\s+"));
                                               }catch(Exception e2){
-                                                  hashes = null;
+                                                  setHashes(null);
                                               }
                                           }
                                       }

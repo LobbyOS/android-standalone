@@ -1,4 +1,4 @@
-package com.lobby.lobby;
+package com.lobby.installer;
 
 
 import android.annotation.TargetApi;
@@ -24,7 +24,7 @@ import android.view.MenuItem;
 import java.util.List;
 import java.net.InetAddress;
 
-import static com.lobby.lobby.LobbyActivity.startServer;
+import static com.lobby.installer.LobbyActivity.startServer;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On

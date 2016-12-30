@@ -1,4 +1,4 @@
-package com.lobby.lobby;
+package com.lobby.installer;
 
 import android.content.Context;
 import android.content.Intent;
@@ -24,7 +24,7 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.lobby.lobby.Utils;
+import com.lobby.installer.Utils;
 
 import java.net.URL;
 

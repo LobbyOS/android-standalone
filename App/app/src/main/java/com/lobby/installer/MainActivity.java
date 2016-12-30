@@ -1,4 +1,4 @@
-package com.lobby.lobby;
+package com.lobby.installer;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -355,7 +355,7 @@ public class MainActivity extends AppCompatActivity {
                 // Otherwise, set the URL to null.
                 Uri.parse("http://host/path"),
                 // TODO: Make sure this auto-generated app URL is correct.
-                Uri.parse("android-app://com.lobby.lobby/http/host/path")
+                Uri.parse("android-app://com.lobby.installer/http/host/path")
         );
         AppIndex.AppIndexApi.start(client, viewAction);
     }
@@ -374,7 +374,7 @@ public class MainActivity extends AppCompatActivity {
                 // Otherwise, set the URL to null.
                 Uri.parse("http://host/path"),
                 // TODO: Make sure this auto-generated app URL is correct.
-                Uri.parse("android-app://com.lobby.lobby/http/host/path")
+                Uri.parse("android-app://com.lobby.installer/http/host/path")
         );
         AppIndex.AppIndexApi.end(client, viewAction);
         client.disconnect();

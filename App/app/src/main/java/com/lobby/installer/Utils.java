@@ -1,4 +1,4 @@
-package com.lobby.lobby;
+package com.lobby.installer;
 
 /**
  * Created by Subin Siby on 8/22/16.

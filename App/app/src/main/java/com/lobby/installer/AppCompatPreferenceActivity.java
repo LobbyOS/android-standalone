@@ -1,4 +1,4 @@
-package com.lobby.lobby;
+package com.lobby.installer;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
