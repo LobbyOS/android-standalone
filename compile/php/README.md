@@ -23,14 +23,19 @@ PHP version currently used : 7.0.10
 
 * Edit `ext/standard/dns.c` and add `#undef HAVE_RES_NSEARCH` at the top after all includes.
 
-  Also add prefix "__" to strings `res_ninit`, `dn_skipname` in `dns.c`
+  Also add prefix `__` to strings `res_ninit`, `dn_skipname` in `dns.c` which would make it into this :
+
+  ```
+  __res_ninit
+  __dn_skipname
+  ```
 
 * Set environment
 
   ```bash
   export CFLAGS="$CFLAGS -pie -fPIE -fpic -fPIC -ldl -lcrypt -lc"
-  export CPPFLAGS="$CPPFLAGS -I$(`echo realpath '../../openssl/output/include'`) -I$(`echo realpath '../../libxml2/output/include'`) -I$(`echo realpath '../../libtool/output/include'`) -I$(`echo realpath '../../libiconv/output/include'`) -I$(`echo realpath '../../libcrypt/output/include'`)"
-  export LDFLAGS="$LDFLAGS -L$(`echo realpath '../../openssl/output/lib'`) -L$(`echo realpath '../../libxml2/output/lib'`) -L$(`echo realpath '../../libtool/output/lib'`) -L$(`echo realpath '../../libiconv/output/lib'`) -L$(`echo realpath '../../libcrypt/output/lib'`)"
+  export CPPFLAGS="$CPPFLAGS -I$(`echo realpath '../../openssl/output/include'`) -I$(`echo realpath '../../libxml2/output/include'`) -I$(`echo realpath '../../libtool/output/include'`) -I$(`echo realpath '../../libiconv/output/include'`) -I$(`echo realpath '../../libcrypt/output/include'`) -I$SYSROOT/usr/include"
+  export LDFLAGS="$LDFLAGS -L$(`echo realpath '../../openssl/output/lib'`) -L$(`echo realpath '../../libxml2/output/lib'`) -L$(`echo realpath '../../libtool/output/lib'`) -L$(`echo realpath '../../libiconv/output/lib'`) -L$(`echo realpath '../../libcrypt/output/lib'`) -I$SYSROOT/usr/lib"
   ```
 
 * Use this to configure the build :
@@ -45,13 +50,20 @@ PHP version currently used : 7.0.10
     --with-mcrypt="$(`echo realpath '../../libmcrypt/output'`)" \
     --with-libxml-dir="$(`echo realpath '../../libxml2/output'`)" \
     --with-config-file-path=php.ini --with-config-file-scan-dir=. \
-    --enable-cli --enable-pdo --enable-mbstring --enable-zip --enable-pcntl \
+    --enable-cli --enable-pdo --enable-mbstring --enable-zip --enable-intl \
     --without-iconv --disable-cgi --disable-rpath --enable-opcache=no \
     --disable-posix \
     --prefix="$(`echo realpath '../output'`)"
   ```
 
 * Edit `Makefile` and replace strings `@$(PHP_PHARCMD_EXECUTABLE)` & `$(top_builddir)/sapi/cli/php` with `php -d extension=phar.so`
+
+* Edit `Makefile` and replace accordingly :
+
+| String | Replace With |
+| ------ | ------------ |
+| -I/usr/include | -I${SYSROOT}/usr/include |
+| -L/usr/lib/i386-linux-gnu | -L${SYSROOT}/usr/lib |
 
 * While building, `Zend/zend_operators.h` file may cause an error. In this case, edit the file at the line where error occured and make the `if` condition false.
 

@@ -43,7 +43,7 @@ function libxml2(){
 
   cd ..
 
-  mkdir output/bin
+  mkdir -p output/bin
   cp src/xml2-config output/bin
   cp src/include output/include -R
   cp src/.libs output/lib -R
@@ -81,7 +81,7 @@ function libcrypt(){
 
   cd ..
 
-  mkdir output/ output/lib output/include
+  mkdir -p output/ output/lib output/include
   cp src/libcrypt.a output/lib
   cp src/crypt.h output/include
   cp src/mpi.h output/include
@@ -118,10 +118,9 @@ function curl(){
   setenv
   cd $compileDir/curl/src
 
-  make clean
-
   ./configure --host=$TARGET --with-ssl='../../openssl/output' --prefix="$(`echo realpath ../output`)"
 
+  make clean
   make
   make install
 }
@@ -131,11 +130,9 @@ function curl(){
 function php(){
   cd $compileDir/php/src
 
-  make clean
-
   . $compileDir/setenv.sh
 
-  export CFLAGS="$CFLAGS -pie -fPIE -fpic -fPIC -ldl -lcrypt -lc"
+  export CFLAGS="$CFLAGS -pie -fPIE -fpic -fPIC -ldl -lcrypt -lc -lsupc++ -lstdc++ -lstlport_static"
   export CPPFLAGS="$CPPFLAGS -I$(`echo realpath '../../openssl/output/include'`) -I$(`echo realpath '../../libxml2/output/include'`) -I$(`echo realpath '../../libtool/output/include'`) -I$(`echo realpath '../../libiconv/output/include'`) -I$(`echo realpath '../../libcrypt/output/include'`)"
   export LDFLAGS="$LDFLAGS -L$(`echo realpath '../../openssl/output/lib'`) -L$(`echo realpath '../../libxml2/output/lib'`) -L$(`echo realpath '../../libtool/output/lib'`) -L$(`echo realpath '../../libiconv/output/lib'`) -L$(`echo realpath '../../libcrypt/output/lib'`)"
 
@@ -147,20 +144,24 @@ function php(){
     --with-mcrypt="$(`echo realpath '../../libmcrypt/output'`)" \
     --with-libxml-dir="$(`echo realpath '../../libxml2/output'`)" \
     --with-config-file-path=php.ini --with-config-file-scan-dir=. \
-    --enable-cli --enable-pdo --enable-mbstring --enable-zip --enable-pcntl \
-    --without-iconv --disable-cgi --disable-rpath --enable-opcache=no \
+    --enable-cli --enable-pdo --enable-mbstring --enable-zip --enable-intl \
+    --without-iconv --disable-cgi --disable-rpath --enable-opcache \
     --disable-posix \
     --prefix="$(`echo realpath '../output'`)"
 
   sed -i -e 's~@$(PHP_PHARCMD_EXECUTABLE)~php -d extension=phar.so~g' Makefile
   sed -i -e 's~$(top_builddir)/sapi/cli/php~php -d extension=phar.so~g' Makefile
 
+  sed -i -e 's~-I/usr/include~-I${SYSROOT}/usr/include~g' Makefile
+  sed -i -e 's~-L/usr/lib/i386-linux-gnu~-L${SYSROOT}/usr/lib~g' Makefile
+
+  make clean
   make
   make install
 
   cd ..
 
-  mkdir php php/extensions
+  mkdir -p php php/extensions
   cp ./output/bin/php ./php/php-cli
   cp ./php-wrapper ./php/php
   cp ../curl/output/lib/libcurl.so ./php/extensions
@@ -170,7 +171,7 @@ function php(){
 
   chrpath --delete php/php-cli php/extensions/*
 
-  mkdir php-22
+  mkdir -p php-22
   cp ./php/* ./php-22 -r
   ../android-elf-cleaner/output/aec ./php-22/php-cli ./php-22/extensions/*
 }
