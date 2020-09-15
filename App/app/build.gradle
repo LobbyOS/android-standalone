@@ -3,10 +3,10 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         config {
-            storeFile file('***REMOVED***')
-            storePassword '***REMOVED***'
+            storeFile file('')
+            storePassword ''
             keyAlias 'a'
-            keyPassword '***REMOVED***'
+            keyPassword ''
         }
     }
     compileSdkVersion 23
